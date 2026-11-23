@@ -99,9 +99,9 @@ run_suite_for() {
     *) FAIL=$((FAIL + 1)); printf '  [FAIL] %s: %s\n' "$label: missing agy stderr" "$err" >&2 ;;
   esac
 
-  # 9. 顶层 --help 追加 3 行 gay 头部并继续透传，子命令 --help 不追加
+  # 9. 顶层 --help 追加 gay 头部与分隔线并继续透传，子命令 --help 不追加
   out=$(PATH="$MOCK_BIN:$PATH" "$runner" --help)
-  expected=$(printf 'gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n\nARGC=1\nARG=[--help]')
+  expected=$(printf 'gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n--------------------------------------------------------------------------\n\nARGC=1\nARG=[--help]')
   assert_eq "$label: top-level --help header" "$expected" "$out"
 
   out=$(PATH="$MOCK_BIN:$PATH" "$runner" mcp --help)

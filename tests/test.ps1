@@ -61,7 +61,7 @@ exit /b %ERRORLEVEL%
         Assert-Eq "${Label}: exit code passthrough" "42" "$code"
 
         $out = (& $CmdBlock @("--help")) -join "`n"
-        $expectedHelp = "gay-cli (agy trampoline):`n  --yolo                          Alias for --dangerously-skip-permissions`n`nARGC=1`nARG=[--help]"
+        $expectedHelp = "gay-cli (agy trampoline):`n  --yolo                          Alias for --dangerously-skip-permissions`n--------------------------------------------------------------------------`n`nARGC=1`nARG=[--help]"
         Assert-Eq "${Label}: top-level --help header" $expectedHelp $out
 
         $out = (& $CmdBlock @("mcp", "--help")) -join "`n"

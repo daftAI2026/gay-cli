@@ -39,7 +39,7 @@ foreach ($arg in $args) {
 
 # ---------- 3. 顶层帮助头部 / 交互式控制台抹除触发行 ----------
 if ($args.Count -eq 1 -and ($args[0] -eq "-h" -or $args[0] -eq "--help")) {
-    [Console]::Out.Write("gay-cli (agy trampoline):`n  --yolo                          Alias for --dangerously-skip-permissions`n`n")
+    [Console]::Out.Write("gay-cli (agy trampoline):`n  --yolo                          Alias for --dangerously-skip-permissions`n--------------------------------------------------------------------------`n`n")
 } elseif ($shouldClear -and (-not [Console]::IsOutputRedirected) -and ($env:GAY_NO_CLEAR -ne "1")) {
     $esc = [char]27
     [Console]::Write("${esc}[1A${esc}[2K`r")

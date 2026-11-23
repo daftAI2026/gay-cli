@@ -52,7 +52,7 @@ done
 
 # ---------- 3. 顶层帮助头部 / 交互式 TTY 抹除触发行 ----------
 if [ $# -eq 1 ] && { [ "$1" = "-h" ] || [ "$1" = "--help" ]; }; then
-  printf 'gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n\n'
+  printf 'gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n--------------------------------------------------------------------------\n\n'
 elif [ "$should_clear" -eq 1 ] && [ -t 1 ] && [ "${GAY_NO_CLEAR:-0}" != "1" ]; then
   printf '\033[1A\033[2K\r'
 fi

@@ -2,7 +2,7 @@
 
 > L2 | 父级: ../CLAUDE.md
 
-核心职责：承载各操作系统的 `gay -> agy` 参数重写、顶层 `-h`/`--help` 头部追加、交互式 TTY 触发行自动抹除与进程移交入口。除 `--yolo` 替换为 `--dangerously-skip-permissions`（遇 `--` 停止重写）外，全量透明透传其余参数与退出码；顶层 `-h`/`--help` 输出 3 行 `gay` 映射后照常透传 `agy` 帮助；非打印/非帮助/非子命令的交互式启动前自动清理触发行（可用 `GAY_NO_CLEAR=1` 关闭）；依赖缺失时写 `stderr` 并返回 `127`。
+核心职责：承载各操作系统的 `gay -> agy` 参数重写、顶层 `-h`/`--help` 头部追加、交互式 TTY 触发行自动抹除与进程移交入口。除 `--yolo` 替换为 `--dangerously-skip-permissions`（遇 `--` 停止重写）外，全量透明透传其余参数与退出码；顶层 `-h`/`--help` 输出带分隔线的 `gay-cli` 映射头部后照常透传 `agy` 帮助；非打印/非帮助/非子命令的交互式启动前自动清理触发行（可用 `GAY_NO_CLEAR=1` 关闭）；依赖缺失时写 `stderr` 并返回 `127`。
 
 > 成员清单
 > gay: Unix 原生核心跳板，POSIX `/bin/sh` 原地位置参数重写 + `exec agy "$@"` 进程替换，0 字节常驻内存，覆盖 macOS / Linux / WSL / Git Bash

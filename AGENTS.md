@@ -8,7 +8,7 @@ Shared engineering contract for AI coding agents working in this repository (Ant
 
 - `gay` -> `agy`
 - `gay --yolo` -> `agy --dangerously-skip-permissions`
-- Top-level `gay -h` / `gay --help` prepends a 3-line `gay-cli` alias header before delegating to `agy` (subcommand `--help` stays untouched).
+- Top-level `gay -h` / `gay --help` prepends a compact `gay-cli` alias header with a divider before delegating to `agy` (subcommand `--help` stays untouched).
 - Interactive TTY launches auto-clear the trigger line (`\x1b[1A\x1b[2K\r`) before handing off to `agy` (opt out via `GAY_NO_CLEAR=1`; never fires on non-TTY, `-h`/`--help`, `-p`/`--print`/`--prompt`, or subcommands).
 - Everything else passes through verbatim (stop rewriting after `--`).
 

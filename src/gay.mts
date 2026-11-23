@@ -111,10 +111,10 @@ function main(): void {
   const rawArgs = process.argv.slice(2);
   const { args: forwarded, shouldClear } = rewriteArgs(rawArgs);
 
-  // 顶层 -h/--help 追加 3 行 gay 映射，否则交互式 TTY 启动前抹除上一行触发命令
+  // 顶层 -h/--help 追加 gay 映射头部与分隔线，否则交互式 TTY 启动前抹除上一行触发命令
   if (rawArgs.length === 1 && (rawArgs[0] === "-h" || rawArgs[0] === "--help")) {
     process.stdout.write(
-      "gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n\n",
+      "gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n--------------------------------------------------------------------------\n\n",
     );
   } else if (
     shouldClear &&
