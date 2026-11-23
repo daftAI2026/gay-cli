@@ -3,6 +3,7 @@
   <p><b>零常驻开销的 <a href="https://github.com/google-antigravity/antigravity-cli"><code>agy</code></a> 跨平台 CLI 跳转工具。</b></p>
   <p><a href="README.md">English</a> · <b>中文</b></p>
   <a href="https://github.com/daftAI2026/gay-cli/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/daftAI2026/gay-cli/ci.yml?branch=main&style=flat-square&label=CI" alt="CI"></a>
+  <a href="https://github.com/daftAI2026/gay-cli/releases"><img src="https://img.shields.io/github/v/release/daftAI2026/gay-cli?label=version&style=flat-square" alt="Version"></a>
   <a href="https://github.com/daftAI2026/gay-cli/stargazers"><img src="https://img.shields.io/github/stars/daftAI2026/gay-cli?style=flat-square" alt="Stars"></a>
   <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License"></a>
   <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg?style=flat-square" alt="Zero Dependencies">
@@ -19,7 +20,13 @@
 
 ## 快速开始
 
-**macOS / Linux**
+**Homebrew（macOS / Linux）**
+
+```sh
+brew install daftAI2026/tap/gay
+```
+
+**macOS / Linux（脚本）**
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh | sh
@@ -66,7 +73,8 @@ curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh 
 卸载（macOS / Linux）：
 
 ```sh
-rm -f "${GAY_INSTALL_DIR:-$HOME/.local/bin}/gay"
+brew uninstall gay                                  # Homebrew 安装方式
+rm -f "${GAY_INSTALL_DIR:-$HOME/.local/bin}/gay"    # 脚本安装方式
 ```
 
 卸载（Windows PowerShell）：

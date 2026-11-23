@@ -17,7 +17,9 @@ If you are an AI agent asked to install `gay-cli`, explain each command to the u
    - macOS / Linux: `command -v agy`
    - Windows (PowerShell): `Get-Command agy -CommandType Application`
 2. Install `gay` for the current platform:
-   - macOS / Linux (recommended, 0 bytes resident RAM via POSIX `exec`):
+   - macOS / Linux via Homebrew (preferred if Homebrew is installed):
+     `brew install daftAI2026/tap/gay`
+   - macOS / Linux via script (0 bytes resident RAM via POSIX `exec`):
      Show the user the install command or run after confirmation:
      `curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh | sh`
      Custom directory option:
