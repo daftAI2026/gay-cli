@@ -114,6 +114,47 @@ printf '  [PASS] Node --check syntax\n'
 run_suite_for "bin/gay (POSIX sh)" "$ROOT_DIR/bin/gay"
 run_suite_for "bin/gay.mjs (Node)" "$ROOT_DIR/bin/gay.mjs"
 
+# TTY 抹除触发行行为验证（需 python3 pty）
+if command -v python3 >/dev/null 2>&1; then
+  printf '=== Testing TTY Clear-Line ===\n'
+  check_tty_clear() {
+    name=$1
+    expect_clear=$2
+    runner=$3
+    shift 3
+    has_clear=$(PATH="$MOCK_BIN:$PATH" python3 - "$runner" "$@" << 'PY'
+import os, pty, select, subprocess, sys
+
+master, slave = pty.openpty()
+proc = subprocess.Popen(sys.argv[1:], stdin=slave, stdout=slave, stderr=slave, close_fds=True)
+os.close(slave)
+buf = bytearray()
+while True:
+    r, _, _ = select.select([master], [], [], 2.0)
+    if not r:
+        break
+    try:
+        chunk = os.read(master, 4096)
+    except OSError:
+        break
+    if not chunk:
+        break
+    buf.extend(chunk)
+os.close(master)
+proc.wait(timeout=5)
+print("yes" if b"\x1b[1A\x1b[2K\r" in buf else "no")
+PY
+)
+    assert_eq "$name" "$expect_clear" "$has_clear"
+  }
+
+  check_tty_clear "bin/gay TTY: clears on --yolo" "yes" "$ROOT_DIR/bin/gay" --yolo
+  check_tty_clear "bin/gay TTY: skips clear on --help" "no" "$ROOT_DIR/bin/gay" --help
+  check_tty_clear "bin/gay TTY: skips clear on subcommand" "no" "$ROOT_DIR/bin/gay" models
+  check_tty_clear "bin/gay.mjs TTY: clears on --yolo" "yes" "$ROOT_DIR/bin/gay.mjs" --yolo
+  check_tty_clear "bin/gay.mjs TTY: skips clear on -p" "no" "$ROOT_DIR/bin/gay.mjs" -p hi
+fi
+
 # 本地安装脚本测试（覆盖 --prefix 参数）
 printf '=== Testing install.sh ===\n'
 INSTALL_TARGET="$TMP_DIR/installed-bin"

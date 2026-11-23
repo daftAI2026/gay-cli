@@ -1,6 +1,6 @@
 #!/bin/sh
 # [INPUT]: 依赖 POSIX /bin/sh 与宿主 PATH 中的 agy 可执行文件
-# [OUTPUT]: 对外提供 gay 命令入口，将 --yolo 重写为 --dangerously-skip-permissions 并全量透传其余参数
+# [OUTPUT]: 对外提供 gay 命令入口，将 --yolo 重写为 --dangerously-skip-permissions，交互式 TTY 启动前自动抹除触发行并全量透传参数
 # [POS]: bin/ 的 Unix 原生核心跳板（macOS/Linux/WSL/Git Bash），通过 exec 原地替换进程映像实现 0 字节常驻内存
 # [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
 set -eu
@@ -11,8 +11,16 @@ if ! command -v agy >/dev/null 2>&1; then
   exit 127
 fi
 
-# ---------- 2. 纯 POSIX 原地参数重写 ----------
-# 利用位置参数环形重建，零数组依赖，完整保留空格/引号/连字符前缀
+# ---------- 2. 纯 POSIX 原地参数重写 + 交互模式判断 ----------
+# 仅在交互式 TUI 启动（非子命令、非 --help/-p 打印模式）且 stdout 为 TTY 时抹除上一行触发命令
+should_clear=1
+if [ $# -gt 0 ]; then
+  case "$1" in
+    -*) ;;
+    *) should_clear=0 ;;
+  esac
+fi
+
 n=$#
 passthrough=0
 while [ "$n" -gt 0 ]; do
@@ -29,6 +37,10 @@ while [ "$n" -gt 0 ]; do
       --yolo)
         set -- "$@" "--dangerously-skip-permissions"
         ;;
+      -h|--help|-p|--print|--prompt|--prompt=*)
+        should_clear=0
+        set -- "$@" "$arg"
+        ;;
       *)
         set -- "$@" "$arg"
         ;;
@@ -38,5 +50,10 @@ while [ "$n" -gt 0 ]; do
   fi
 done
 
-# ---------- 3. 进程映像替换 ----------
+# ---------- 3. 交互式 TTY 抹除触发行 ----------
+if [ "$should_clear" -eq 1 ] && [ -t 1 ] && [ "${GAY_NO_CLEAR:-0}" != "1" ]; then
+  printf '\033[1A\033[2K\r'
+fi
+
+# ---------- 4. 进程映像替换 ----------
 exec agy "$@"

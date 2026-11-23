@@ -1,6 +1,6 @@
 {
   "name": "gay-cli",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Zero-overhead CLI alias trampoline for agy (gay -> agy, gay --yolo -> agy --dangerously-skip-permissions).",
   "type": "module",
   "license": "MIT",

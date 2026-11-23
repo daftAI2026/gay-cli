@@ -1,16 +1,16 @@
 #!/usr/bin/env node
 /**
  * [INPUT]: 依赖 node:child_process 与 node:os，以及宿主 PATH 中的 agy 可执行文件
- * [OUTPUT]: 编译输出至 bin/gay.mjs，作为 npm i -g github:daftAI2026/gay-cli 的跨平台可执行入口
+ * [OUTPUT]: 编译输出至 bin/gay.mjs，作为 npm i -g github:daftAI2026/gay-cli 的跨平台可执行入口（含交互式 TTY 触发行清理）
  * [POS]: src/ 的唯一 TypeScript 源码真源（Single Source of Truth），经 tsc 编译生成 bin/gay.mjs
  * [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
  */
 import { spawn, spawnSync } from "node:child_process";
 import os from "node:os";
-// ---------- 1. 参数重写 ----------
 export function rewriteArgs(argv) {
     const result = [];
     let passthrough = false;
+    let shouldClear = argv.length === 0 || argv[0].startsWith("-");
     for (const arg of argv) {
         if (!passthrough && arg === "--") {
             passthrough = true;
@@ -20,10 +20,19 @@ export function rewriteArgs(argv) {
             result.push("--dangerously-skip-permissions");
         }
         else {
+            if (!passthrough &&
+                (arg === "-h" ||
+                    arg === "--help" ||
+                    arg === "-p" ||
+                    arg === "--print" ||
+                    arg === "--prompt" ||
+                    arg.startsWith("--prompt="))) {
+                shouldClear = false;
+            }
             result.push(arg);
         }
     }
-    return result;
+    return { args: result, shouldClear };
 }
 // ---------- 2. 定位 agy 可执行文件 ----------
 function resolveAgy() {
@@ -75,7 +84,11 @@ function main() {
     if (!agyPath) {
         exitMissing();
     }
-    const forwarded = rewriteArgs(process.argv.slice(2));
+    const { args: forwarded, shouldClear } = rewriteArgs(process.argv.slice(2));
+    // 交互式 TTY 启动前抹除上一行触发命令
+    if (shouldClear && process.stdout.isTTY && process.env.GAY_NO_CLEAR !== "1") {
+        process.stdout.write("\x1b[1A\x1b[2K\r");
+    }
     const child = spawnAgy(agyPath, forwarded);
     // 前台进程组收到 SIGINT 时由 agy 自行处理，避免父进程抢先退出破坏 TUI
     process.on("SIGINT", () => { });
