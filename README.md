@@ -9,6 +9,10 @@
   <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg?style=flat-square" alt="Zero Dependencies">
 </div>
 
+<p align="center">
+  <img src="./docs/demo.gif" alt="gay-cli terminal demo" width="900" />
+</p>
+
 > **Prerequisite**: `gay` delegates directly to [`agy`](https://github.com/google-antigravity/antigravity-cli). Install [`antigravity-cli`](https://github.com/google-antigravity/antigravity-cli) first and make sure `agy` is in your `PATH`.
 
 ## Features

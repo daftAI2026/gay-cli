@@ -9,6 +9,10 @@
   <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg?style=flat-square" alt="Zero Dependencies">
 </div>
 
+<p align="center">
+  <img src="./docs/demo.gif" alt="gay-cli 终端演示" width="900" />
+</p>
+
 > **前置要求**：`gay` 依赖宿主环境已安装的 [`agy`](https://github.com/google-antigravity/antigravity-cli)（`antigravity-cli`）。请先安装 [`antigravity-cli`](https://github.com/google-antigravity/antigravity-cli) 并确保 `agy` 位于系统 `PATH` 中。
 
 ## 核心特性

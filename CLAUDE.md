@@ -5,6 +5,7 @@ POSIX Shell (`exec`) + Windows PowerShell/CMD + TypeScript (`tsc` -> Zero-Dep No
 <directory>
 src/ - 跨平台 npm 适配层的严格 TypeScript 源码真源 (`gay.mts`)
 bin/ - 跨平台可执行入口集合 (Unix POSIX sh、Windows cmd/ps1、由 src/ 编译的 gay.mjs)
+docs/ - 终端演示多媒体资产 (`demo.gif` / `demo.mp4`，已打码并嵌入 README)
 tests/ - 端到端自动化验证套件 (test.sh 覆盖 Unix，test.ps1 覆盖 Windows)
 .github/ - GitHub Actions 三端 CI 工作流 (TS 编译一致性校验 + ubuntu / macos / windows)
 </directory>
