@@ -60,6 +60,12 @@ function exitMissing() {
 }
 
 // ---------- 3. 透传启动与信号转发 ----------
+function quoteWinCmdArg(arg) {
+  if (arg === "") return '""';
+  if (!/[\s"&|<>^()]/.test(arg)) return arg;
+  return `"${arg.replace(/"/g, '\\"')}"`;
+}
+
 const agyPath = resolveAgy();
 if (!agyPath) {
   exitMissing();
@@ -69,10 +75,18 @@ const forwarded = rewriteArgs(process.argv.slice(2));
 const isWinBatch =
   process.platform === "win32" && /\.(cmd|bat)$/i.test(agyPath);
 
-const child = spawn(agyPath, forwarded, {
-  stdio: "inherit",
-  shell: isWinBatch,
-});
+const child = isWinBatch
+  ? spawn(
+      process.env.ComSpec || "cmd.exe",
+      [
+        "/d",
+        "/s",
+        "/c",
+        `"${[quoteWinCmdArg(agyPath), ...forwarded.map(quoteWinCmdArg)].join(" ")}"`,
+      ],
+      { stdio: "inherit", windowsVerbatimArguments: true },
+    )
+  : spawn(agyPath, forwarded, { stdio: "inherit" });
 
 // 前台进程组收到 SIGINT 时由 agy 自行处理，避免父进程抢先退出破坏 TUI
 process.on("SIGINT", () => {});

@@ -1,0 +1,37 @@
+# gay-cli
+
+> Zero-overhead cross-platform CLI alias trampoline for `agy`: `gay` launches `agy`, and `gay --yolo` launches `agy --dangerously-skip-permissions`. All other flags, subcommands, TTY state, signals, and exit codes pass straight through.
+
+Source: https://github.com/daftAI2026/gay-cli
+Organization: daftAI2026
+
+## Prerequisite
+
+The user must already have the `agy` CLI installed and available in `PATH`. Do not attempt to install `gay` if `agy` is missing; tell the user to install `agy` first.
+
+## Install for the user
+
+If you are an AI agent asked to install `gay-cli`, explain each command to the user before running it:
+
+1. Check that `agy` is available:
+   - macOS / Linux: `command -v agy`
+   - Windows (PowerShell): `Get-Command agy -CommandType Application`
+2. Install `gay` for the current platform:
+   - macOS / Linux (recommended, 0 bytes resident RAM via POSIX `exec`):
+     Show the user the install command or run after confirmation:
+     `curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh | sh`
+     Custom directory option:
+     `curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh | sh -s -- --prefix "$HOME/.local/bin"`
+   - Windows (PowerShell):
+     Show the user the install command or run after confirmation:
+     `irm https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.ps1 | iex`
+   - Cross-platform via GitHub npm (no npm registry account required):
+     `npm install -g github:daftAI2026/gay-cli`
+3. Verify installation:
+   - Run `gay --help` and confirm it outputs `agy` usage help.
+
+## Command Mapping
+
+- `gay` -> `agy`
+- `gay --yolo` -> `agy --dangerously-skip-permissions`
+- `gay [args...]` -> `agy [args...]` (stops rewriting `--yolo` after `--`)

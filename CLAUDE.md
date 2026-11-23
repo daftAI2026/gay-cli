@@ -10,9 +10,15 @@ tests/ - 端到端自动化验证套件 (test.sh 覆盖 Unix，test.ps1 覆盖 W
 
 <config>
 package.json - GitHub npm 直装清单 (`npm i -g github:daftAI2026/gay-cli`)，零第三方依赖
-install.sh - macOS / Linux 一键安装脚本，部署 bin/gay 至 ~/.local/bin/gay
-install.ps1 - Windows PowerShell 一键安装脚本，部署 gay.cmd 与 _gay.ps1 并写入用户 PATH
-README.md - 安装指南、映射规则与第一性原理架构说明
+Makefile - 开发者快捷入口 (`test` / `check` / `install` / `uninstall`)
+install.sh - macOS / Linux 一键安装脚本，支持 `--prefix` 与 `GAY_INSTALL_DIR`
+install.ps1 - Windows PowerShell 一键安装脚本，部署 `gay.cmd` + `_gay.ps1` 并幂等写入用户 PATH
+llms.txt - 面向 AI Agent 的标准安装与用法说明（参考 Mole Agent-First 范式）
+AGENTS.md - 跨 Agent 共享工程契约与产品边界（做什么 / 不做什么）
+README.md - 英文主文档（快速开始、AI Agent 安装、架构表、卸载折叠区）
+README_CN.md - 中文镜像文档
+.gitattributes - 强制 Unix 脚本 LF、Windows 批处理 CRLF，防止跨平台换行符损坏
+.editorconfig - 统一跨编辑器编码与缩进规范
 LICENSE - MIT 开源协议
 </config>
 

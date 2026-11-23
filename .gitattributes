@@ -1,0 +1,10 @@
+* text=auto
+
+# Unix 脚本强制 LF，避免在 Windows 检出后破坏 shebang
+bin/gay text eol=lf
+*.sh text eol=lf
+*.mjs text eol=lf
+
+# Windows 批处理强制 CRLF
+*.cmd text eol=crlf
+*.ps1 text eol=crlf

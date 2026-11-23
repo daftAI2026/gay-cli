@@ -114,10 +114,10 @@ printf '  [PASS] Node --check syntax\n'
 run_suite_for "bin/gay (POSIX sh)" "$ROOT_DIR/bin/gay"
 run_suite_for "bin/gay.mjs (Node)" "$ROOT_DIR/bin/gay.mjs"
 
-# 本地安装脚本测试
+# 本地安装脚本测试（覆盖 --prefix 参数）
 printf '=== Testing install.sh ===\n'
 INSTALL_TARGET="$TMP_DIR/installed-bin"
-PATH="$MOCK_BIN:$PATH" GAY_INSTALL_DIR="$INSTALL_TARGET" sh "$ROOT_DIR/install.sh" >/dev/null
+PATH="$MOCK_BIN:$PATH" sh "$ROOT_DIR/install.sh" --prefix "$INSTALL_TARGET" >/dev/null
 out=$(PATH="$MOCK_BIN:$PATH" "$INSTALL_TARGET/gay" --yolo)
 expected=$(printf 'ARGC=1\nARG=[--dangerously-skip-permissions]')
 assert_eq "install.sh: installed binary works" "$expected" "$out"

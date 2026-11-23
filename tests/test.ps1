@@ -40,25 +40,25 @@ exit /b %ERRORLEVEL%
     function Run-Suite($Label, $CmdBlock) {
         Write-Host "=== Testing $Label ==="
         $out = (& $CmdBlock @()) -join "`n"
-        Assert-Eq "$Label: no args" "ARGC=0" $out
+        Assert-Eq "${Label}: no args" "ARGC=0" $out
 
         $out = (& $CmdBlock @("--yolo")) -join "`n"
-        Assert-Eq "$Label: --yolo rewrite" "ARGC=1`nARG=[--dangerously-skip-permissions]" $out
+        Assert-Eq "${Label}: --yolo rewrite" "ARGC=1`nARG=[--dangerously-skip-permissions]" $out
 
         $out = (& $CmdBlock @("-c", "--yolo", "--effort=high")) -join "`n"
-        Assert-Eq "$Label: mixed & equals" "ARGC=3`nARG=[-c]`nARG=[--dangerously-skip-permissions]`nARG=[--effort=high]" $out
+        Assert-Eq "${Label}: mixed & equals" "ARGC=3`nARG=[-c]`nARG=[--dangerously-skip-permissions]`nARG=[--effort=high]" $out
 
         $out = (& $CmdBlock @("--yolo", "-p", "hello --yolo world")) -join "`n"
-        Assert-Eq "$Label: spaces preserved" "ARGC=3`nARG=[--dangerously-skip-permissions]`nARG=[-p]`nARG=[hello --yolo world]" $out
+        Assert-Eq "${Label}: spaces preserved" "ARGC=3`nARG=[--dangerously-skip-permissions]`nARG=[-p]`nARG=[hello --yolo world]" $out
 
         $out = (& $CmdBlock @("--yolo", "--", "--yolo")) -join "`n"
-        Assert-Eq "$Label: stop after --" "ARGC=3`nARG=[--dangerously-skip-permissions]`nARG=[--]`nARG=[--yolo]" $out
+        Assert-Eq "${Label}: stop after --" "ARGC=3`nARG=[--dangerously-skip-permissions]`nARG=[--]`nARG=[--yolo]" $out
 
         $env:MOCK_AGY_EXIT = "42"
         & $CmdBlock @("--yolo") | Out-Null
         $code = $LASTEXITCODE
         Remove-Item Env:\MOCK_AGY_EXIT -ErrorAction SilentlyContinue
-        Assert-Eq "$Label: exit code passthrough" "42" "$code"
+        Assert-Eq "${Label}: exit code passthrough" "42" "$code"
     }
 
     $gayCmd = Join-Path $RootDir "bin\gay.cmd"

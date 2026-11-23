@@ -7,6 +7,22 @@ set -eu
 
 REPO_RAW_URL="${GAY_REPO_RAW_URL:-https://raw.githubusercontent.com/daftAI2026/gay-cli/main}"
 INSTALL_DIR="${GAY_INSTALL_DIR:-$HOME/.local/bin}"
+
+# 支持 --prefix <dir> 参数覆盖安装目录
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --prefix)
+      shift
+      [ $# -gt 0 ] || { printf 'install: --prefix 需要指定目录路径。\n' >&2; exit 2; }
+      INSTALL_DIR=$1
+      ;;
+    --prefix=*)
+      INSTALL_DIR=${1#--prefix=}
+      ;;
+  esac
+  shift
+done
+
 TARGET="$INSTALL_DIR/gay"
 
 # ---------- 1. 前置依赖检查 ----------

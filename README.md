@@ -1,61 +1,106 @@
-# gay-cli
+<p align="right"><b>macOS</b> · <b>Linux</b> · <b>Windows</b></p>
 
-极简、零常驻开销的 [`agy`](https://github.com/daftAI2026/gay-cli) CLI 跨平台跳转别名工具。
+<div align="center">
+  <h1>gay-cli</h1>
+  <p><b>Zero-overhead cross-platform CLI trampoline for <code>agy</code>. Type <code>gay</code> for <code>agy</code>, <code>gay --yolo</code> for <code>agy --dangerously-skip-permissions</code>.</b></p>
+  <p><b>English</b> · <a href="README_CN.md">中文</a></p>
+  <a href="https://github.com/daftAI2026/gay-cli/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/daftAI2026/gay-cli/ci.yml?branch=main&style=flat-square&label=CI" alt="CI"></a>
+  <a href="https://github.com/daftAI2026/gay-cli/stargazers"><img src="https://img.shields.io/github/stars/daftAI2026/gay-cli?style=flat-square" alt="Stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square" alt="License"></a>
+  <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg?style=flat-square" alt="Zero Dependencies">
+</div>
 
-## 命令映射
+> **Prerequisite**: `gay` delegates directly to `agy`. Install [`agy`](https://github.com/daftAI2026/gay-cli) first and make sure `agy` is in your `PATH`.
 
-| 输入命令 | 实际执行 |
-| :--- | :--- |
-| `gay` | `agy` |
-| `gay --yolo` | `agy --dangerously-skip-permissions` |
-| `gay [任意参数与子命令]` | 全量透传至 `agy`（`--` 之后停止重写 `--yolo`） |
+## Features
 
-> **前置要求**：使用前需已安装 `agy` CLI 并确保 `agy` 位于系统 `PATH` 中。
+- **Zero resident overhead on Unix**: Pure POSIX `#!/bin/sh` with `exec agy "$@"`, replacing the wrapper process in-place (~1ms startup, **0 bytes** resident RAM, 100% native TTY/TUI/signals).
+- **All platforms out of the box**: Native implementations for macOS, Linux, and Windows (PowerShell & CMD), plus zero-dependency GitHub `npm` install.
+- **Zero third-party dependencies**: Auditable plaintext scripts with no build step, no unsigned binaries, and no SmartScreen/Gatekeeper warnings.
+- **Transparent passthrough**: Only `--yolo` is rewritten (stopped after `--`); every other flag, subcommand, space, quote, and exit code passes straight through to `agy`.
 
----
+## Quick Start
 
-## 安装方式（全平台，无需 npm 源）
-
-### macOS / Linux（推荐：0 字节常驻内存）
+**macOS / Linux (recommended, 0 B RAM)**
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh | sh
 ```
 
-安装至 `~/.local/bin/gay`（与 `agy` 同目录）。可通过 `GAY_INSTALL_DIR` 自定义目标目录。
-
-### Windows（PowerShell）
+**Windows (PowerShell)**
 
 ```powershell
 irm https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.ps1 | iex
 ```
 
-安装至 `%LOCALAPPDATA%\gay\bin` 并自动写入用户 `PATH`，同时兼容 PowerShell 与 CMD，自动绕过默认 `ExecutionPolicy` 限制。
-
-### 通过 GitHub 使用 npm 全局安装（macOS / Linux / Windows 通用）
+**Cross-platform via GitHub npm (no npm registry required)**
 
 ```sh
 npm install -g github:daftAI2026/gay-cli
 ```
 
----
+**With an AI agent**
 
-## 架构设计（第一性原理）
+Tell your agent (Antigravity, Claude Code, Codex, Cursor, etc.):
 
-`gay` 不是一个常驻应用，而是一个**参数重写 + 进程移交跳板**：
+> Install gay-cli for me by reading https://raw.githubusercontent.com/daftAI2026/gay-cli/main/llms.txt
 
-- **macOS / Linux (`bin/gay`)**：纯 POSIX `/bin/sh` 实现，零依赖、零编译，通过 `exec agy "$@"` 原地替换当前进程映像。启动耗时 ~1ms，进入 `agy` 后 `gay` 进程彻底消失——**0 字节常驻内存**，TTY / TUI / `SIGINT` / `SIGWINCH` 与退出码 100% 原生无损。
-- **Windows (`bin/gay.cmd` + `bin/_gay.ps1`)**：利用系统自带签名宿主（零 Defender / SmartScreen 误报），`gay.cmd` 统一承接 CMD 与 PowerShell 入口并以 `%*` 原始透传参数，`_gay.ps1` 完成精准参数重写与退出码传递。
-- **GitHub npm (`bin/gay.mjs`)**：零第三方依赖 ESM 垫片，兼容三端 `npm i -g github:daftAI2026/gay-cli`，正确处理前台进程组 `SIGINT` 避免中断 `agy` TUI。
-
----
-
-## 本地开发与验证
+**Run**
 
 ```sh
-sh ./tests/test.sh
+gay                             # Launch agy
+gay --yolo                      # agy --dangerously-skip-permissions
+gay --yolo -c                   # Continue last session in yolo mode
+gay --yolo -p "refactor this"   # All flags & quoted prompts pass through intact
+gay -- --yolo                   # Stop rewriting after --
+gay --help                      # Full native agy help
+```
+
+<details>
+<summary><strong>Other install &amp; uninstall options</strong></summary>
+
+Install to a custom directory on macOS / Linux:
+
+```sh
+curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh | sh -s -- --prefix "$HOME/.local/bin"
+```
+
+Uninstall on macOS / Linux:
+
+```sh
+rm -f "${GAY_INSTALL_DIR:-$HOME/.local/bin}/gay"
+```
+
+Uninstall on Windows (PowerShell):
+
+```powershell
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\gay"
+```
+
+Uninstall if installed via npm:
+
+```sh
+npm uninstall -g gay-cli
+```
+
+</details>
+
+## Architecture
+
+| Platform / Channel | Entrypoint | Mechanism | Resident RAM |
+| :--- | :--- | :--- | :--- |
+| macOS / Linux / WSL | `bin/gay` | POSIX `/bin/sh` + `exec agy "$@"` | **0 B** |
+| Windows (CMD / PowerShell) | `bin/gay.cmd` + `bin/_gay.ps1` | System PowerShell (`-ExecutionPolicy Bypass`) | Native console |
+| GitHub `npm i -g` | `bin/gay.mjs` | Zero-dep Node ESM (`spawn`, `SIGINT`-safe) | Cross-platform shim |
+
+## Development
+
+```sh
+make test      # Run Unix end-to-end test suite (21+ assertions)
+make check     # Static syntax checks (sh -n & node --check)
+make install   # Local install to ~/.local/bin/gay
 ```
 
 ## License
 
-MIT
+[MIT](LICENSE)
