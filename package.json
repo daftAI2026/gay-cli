@@ -1,0 +1,28 @@
+{
+  "name": "gay-cli",
+  "version": "0.1.0",
+  "description": "Zero-overhead CLI alias trampoline for agy (gay -> agy, gay --yolo -> agy --dangerously-skip-permissions).",
+  "type": "module",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/daftAI2026/gay-cli.git"
+  },
+  "bin": {
+    "gay": "./bin/gay.mjs"
+  },
+  "files": [
+    "bin/gay",
+    "bin/gay.cmd",
+    "bin/_gay.ps1",
+    "bin/gay.mjs",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "test": "sh ./tests/test.sh"
+  }
+}

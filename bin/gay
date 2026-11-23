@@ -1,0 +1,42 @@
+#!/bin/sh
+# [INPUT]: 依赖 POSIX /bin/sh 与宿主 PATH 中的 agy 可执行文件
+# [OUTPUT]: 对外提供 gay 命令入口，将 --yolo 重写为 --dangerously-skip-permissions 并全量透传其余参数
+# [POS]: bin/ 的 Unix 原生核心跳板（macOS/Linux/WSL/Git Bash），通过 exec 原地替换进程映像实现 0 字节常驻内存
+# [PROTOCOL]: 变更时更新此头部，然后检查 CLAUDE.md
+set -eu
+
+# ---------- 1. 前置依赖检查 ----------
+if ! command -v agy >/dev/null 2>&1; then
+  printf 'gay: 未检测到 agy CLI，请先安装 agy 并确保其位于 PATH 中。\n' >&2
+  exit 127
+fi
+
+# ---------- 2. 纯 POSIX 原地参数重写 ----------
+# 利用位置参数环形重建，零数组依赖，完整保留空格/引号/连字符前缀
+n=$#
+passthrough=0
+while [ "$n" -gt 0 ]; do
+  arg=$1
+  shift
+  n=$((n - 1))
+
+  if [ "$passthrough" -eq 0 ]; then
+    case "$arg" in
+      --)
+        passthrough=1
+        set -- "$@" "$arg"
+        ;;
+      --yolo)
+        set -- "$@" "--dangerously-skip-permissions"
+        ;;
+      *)
+        set -- "$@" "$arg"
+        ;;
+    esac
+  else
+    set -- "$@" "$arg"
+  fi
+done
+
+# ---------- 3. 进程映像替换 ----------
+exec agy "$@"
