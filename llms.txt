@@ -7,7 +7,7 @@ Organization: daftAI2026
 
 ## Prerequisite
 
-The user must already have the `agy` CLI installed and available in `PATH`. Do not attempt to install `gay` if `agy` is missing; tell the user to install `agy` first.
+The user must already have the `agy` CLI ([antigravity-cli](https://github.com/google-antigravity/antigravity-cli)) installed and available in `PATH`. Do not attempt to install `gay` if `agy` is missing; tell the user to install `agy` from https://github.com/google-antigravity/antigravity-cli first.
 
 ## Install for the user
 

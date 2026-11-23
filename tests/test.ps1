@@ -67,10 +67,14 @@ exit /b %ERRORLEVEL%
     Run-Suite "bin/gay.cmd + _gay.ps1" { param($a) & $gayCmd @a }
     Run-Suite "bin/gay.mjs (Node)" { param($a) & node $gayMjs @a }
 
-    # 校验缺失 agy 时返回 127
+    # 校验缺失 agy 时返回 127（PowerShell 5.1 下原生命令写 stderr 会触发 ErrorActionPreference=Stop）
     $env:PATH = "$env:SystemRoot\System32;$env:SystemRoot\System32\WindowsPowerShell\v1.0"
+    $prevPref = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
     & $gayCmd 2>$null
-    Assert-Eq "bin/gay.cmd: missing agy exit 127" "127" "$LASTEXITCODE"
+    $missingCode = $LASTEXITCODE
+    $ErrorActionPreference = $prevPref
+    Assert-Eq "bin/gay.cmd: missing agy exit 127" "127" "$missingCode"
 
     # 恢复包含 mock agy 的 PATH 并测试 install.ps1（仅检查文件复制）
     $env:PATH = "$MockBin;$origPath"

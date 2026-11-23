@@ -6,6 +6,22 @@ on:
   pull_request:
 
 jobs:
+  typecheck-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Install devDependencies
+        run: npm ci
+      - name: Typecheck TypeScript source
+        run: npm run typecheck
+      - name: Verify compiled bin/gay.mjs is in sync with src/gay.mts
+        run: |
+          npm run build
+          git diff --exit-code bin/gay.mjs
+
   unix:
     runs-on: ${{ matrix.os }}
     strategy:

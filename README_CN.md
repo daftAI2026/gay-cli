@@ -1,8 +1,6 @@
-<p align="right"><b>macOS</b> · <b>Linux</b> · <b>Windows</b></p>
-
 <div align="center">
   <h1>gay-cli</h1>
-  <p><b>零常驻开销的 <code>agy</code> CLI 跨平台跳转跳板。输入 <code>gay</code> 直达 <code>agy</code>，输入 <code>gay --yolo</code> 等价 <code>agy --dangerously-skip-permissions</code>。</b></p>
+  <p><b>零常驻开销的 <a href="https://github.com/google-antigravity/antigravity-cli"><code>agy</code></a> 跨平台 CLI 跳转工具。</b></p>
   <p><a href="README.md">English</a> · <b>中文</b></p>
   <a href="https://github.com/daftAI2026/gay-cli/actions/workflows/ci.yml"><img src="https://img.shields.io/github/actions/workflow/status/daftAI2026/gay-cli/ci.yml?branch=main&style=flat-square&label=CI" alt="CI"></a>
   <a href="https://github.com/daftAI2026/gay-cli/stargazers"><img src="https://img.shields.io/github/stars/daftAI2026/gay-cli?style=flat-square" alt="Stars"></a>
@@ -10,30 +8,30 @@
   <img src="https://img.shields.io/badge/dependencies-0-brightgreen.svg?style=flat-square" alt="Zero Dependencies">
 </div>
 
-> **前置要求**：`gay` 依赖宿主环境已安装的 `agy` CLI。请先安装 `agy` 并确保其位于系统 `PATH` 中。
+> **前置要求**：`gay` 依赖宿主环境已安装的 [`agy`](https://github.com/google-antigravity/antigravity-cli)（`antigravity-cli`）。请先安装 [`antigravity-cli`](https://github.com/google-antigravity/antigravity-cli) 并确保 `agy` 位于系统 `PATH` 中。
 
 ## 核心特性
 
 - **Unix 零内存常驻**：纯 POSIX `#!/bin/sh` 配合 `exec agy "$@"` 原地替换进程映像（~1ms 启动、**0 字节**常驻内存、TTY / TUI / 信号与退出码 100% 原生透传）。
-- **全平台原生覆盖**：原生支持 macOS、Linux 与 Windows（PowerShell & CMD），同时兼容免 npm 源的 GitHub 直装。
-- **零第三方依赖**：全部为可审计纯文本脚本，免编译、无未签名二进制，杜绝 macOS Gatekeeper 与 Windows Defender 误报。
+- **全平台原生覆盖**：原生支持 macOS、Linux 与 Windows（PowerShell & CMD），同时兼容 GitHub `npm` 直装。
+- **零运行时依赖**：可审计脚本，无未签名二进制，杜绝 macOS Gatekeeper 与 Windows Defender 误报。
 - **无损透明透传**：仅在 `--` 之前重写 `--yolo`，其余所有参数、子命令、空格引号与退出码原封不动交给 `agy`。
 
 ## 快速开始
 
-**macOS / Linux（推荐：0 字节常驻内存）**
+**macOS / Linux**
 
 ```sh
 curl -fsSL https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.sh | sh
 ```
 
-**Windows（PowerShell）**
+**Windows (PowerShell)**
 
 ```powershell
 irm https://raw.githubusercontent.com/daftAI2026/gay-cli/main/install.ps1 | iex
 ```
 
-**通过 GitHub 使用 npm 全平台安装（无需 npm 账号）**
+**npm（GitHub）**
 
 ```sh
 npm install -g github:daftAI2026/gay-cli
@@ -91,13 +89,15 @@ npm uninstall -g gay-cli
 | :--- | :--- | :--- | :--- |
 | macOS / Linux / WSL | `bin/gay` | POSIX `/bin/sh` + `exec agy "$@"` 进程替换 | **0 B** |
 | Windows (CMD / PowerShell) | `bin/gay.cmd` + `bin/_gay.ps1` | 系统签名 PowerShell（绕过默认 ExecutionPolicy） | 原生控制台 |
-| GitHub `npm i -g` | `bin/gay.mjs` | 零依赖 Node ESM（精确引号转义 + `SIGINT` 保护） | 跨平台垫片 |
+| GitHub `npm i -g` | `bin/gay.mjs`（由 `src/gay.mts` 编译） | 严格 TypeScript -> 零依赖 Node ESM（`SIGINT` 保护） | 跨平台垫片 |
 
 ## 本地开发与验证
 
 ```sh
+npm install    # 安装 TypeScript 开发依赖（零运行时依赖）
+make build     # 编译 src/gay.mts -> bin/gay.mjs
 make test      # 运行 Unix 端到端测试套件
-make check     # 静态语法检查（sh -n 与 node --check）
+make check     # 静态语法与类型检查（sh -n / node --check / tsc --noEmit）
 make install   # 本地安装至 ~/.local/bin/gay
 ```
 

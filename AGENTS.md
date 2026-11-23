@@ -12,7 +12,8 @@ Shared engineering contract for AI coding agents working in this repository (Ant
 
 ### What `gay-cli` Should Do
 
-- Stay zero-dependency across all platforms: POSIX `sh` (`exec`) on Unix, native `.cmd` + `_gay.ps1` on Windows, and zero-dep Node ESM (`bin/gay.mjs`) for GitHub npm installs.
+- Stay zero-runtime-dependency across all platforms: POSIX `sh` (`exec`) on Unix, native `.cmd` + `_gay.ps1` on Windows, and strict TypeScript (`src/gay.mts`) compiled via `tsc` to zero-dep Node ESM (`bin/gay.mjs`) for GitHub npm installs.
+- Always edit `src/gay.mts` (never hand-edit `bin/gay.mjs`), then run `make build` so the pre-compiled `bin/gay.mjs` stays in sync for instant `npm i -g github:daftAI2026/gay-cli` installs.
 - Guarantee 0-byte resident overhead on macOS/Linux by always terminating the wrapper via `exec agy "$@"`.
 - Fail fast with a clear `stderr` message and exit code `127` when `agy` is absent from `PATH`.
 - Keep all platform adapters behaviorally identical and verified in CI (`ubuntu-latest`, `macos-latest`, `windows-latest`).
