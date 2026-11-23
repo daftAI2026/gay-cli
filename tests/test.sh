@@ -98,6 +98,15 @@ run_suite_for() {
     *"agy"*) PASS=$((PASS + 1)); printf '  [PASS] %s\n' "$label: missing agy stderr" ;;
     *) FAIL=$((FAIL + 1)); printf '  [FAIL] %s: %s\n' "$label: missing agy stderr" "$err" >&2 ;;
   esac
+
+  # 9. 顶层 --help 追加 3 行 gay 头部并继续透传，子命令 --help 不追加
+  out=$(PATH="$MOCK_BIN:$PATH" "$runner" --help)
+  expected=$(printf 'gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n\nARGC=1\nARG=[--help]')
+  assert_eq "$label: top-level --help header" "$expected" "$out"
+
+  out=$(PATH="$MOCK_BIN:$PATH" "$runner" mcp --help)
+  expected=$(printf 'ARGC=2\nARG=[mcp]\nARG=[--help]')
+  assert_eq "$label: subcommand --help untouched" "$expected" "$out"
 }
 
 # 语法静态检查

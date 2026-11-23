@@ -84,9 +84,15 @@ function main() {
     if (!agyPath) {
         exitMissing();
     }
-    const { args: forwarded, shouldClear } = rewriteArgs(process.argv.slice(2));
-    // 交互式 TTY 启动前抹除上一行触发命令
-    if (shouldClear && process.stdout.isTTY && process.env.GAY_NO_CLEAR !== "1") {
+    const rawArgs = process.argv.slice(2);
+    const { args: forwarded, shouldClear } = rewriteArgs(rawArgs);
+    // 顶层 -h/--help 追加 3 行 gay 映射，否则交互式 TTY 启动前抹除上一行触发命令
+    if (rawArgs.length === 1 && (rawArgs[0] === "-h" || rawArgs[0] === "--help")) {
+        process.stdout.write("gay-cli (agy trampoline):\n  --yolo                          Alias for --dangerously-skip-permissions\n\n");
+    }
+    else if (shouldClear &&
+        process.stdout.isTTY &&
+        process.env.GAY_NO_CLEAR !== "1") {
         process.stdout.write("\x1b[1A\x1b[2K\r");
     }
     const child = spawnAgy(agyPath, forwarded);
