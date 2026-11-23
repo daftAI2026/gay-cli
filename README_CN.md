@@ -20,7 +20,8 @@
 - **Unix 零内存常驻**：纯 POSIX `#!/bin/sh` 配合 `exec agy "$@"` 原地替换进程映像（~1ms 启动、**0 字节**常驻内存、TTY / TUI / 信号与退出码 100% 原生透传）。
 - **全平台原生覆盖**：原生支持 macOS、Linux 与 Windows（PowerShell & CMD），同时兼容 GitHub `npm` 直装。
 - **零运行时依赖**：可审计脚本，无未签名二进制，杜绝 macOS Gatekeeper 与 Windows Defender 误报。
-- **无损透明透传**：仅在 `--` 之前重写 `--yolo`，其余所有参数、子命令、空格引号与退出码原封不动交给 `agy`。
+- **无损透明透传**：仅在 `--` 之前重写 `--yolo`；顶层 `-h`/`--help` 在 `agy` 帮助前追加 3 行别名说明，其余所有参数、子命令、空格引号与退出码原封不动交给 `agy`。
+- **交互式自动清痕**：交互式 TTY 启动 `agy` 前自动抹除上一行 `gay` / `gay --yolo` 触发命令，不干扰管道、`--help`、`-p`/`--print` 与子命令（设 `GAY_NO_CLEAR=1` 可关闭）。
 
 ## 快速开始
 
@@ -62,7 +63,7 @@ gay --yolo                      # 等价 agy --dangerously-skip-permissions
 gay --yolo -c                   # yolo 模式继续上次会话
 gay --yolo -p "帮我重构这段代码" # 含空格参数与子命令原样透传
 gay -- --yolo                   # -- 之后停止参数重写
-gay --help                      # 直接透传 agy 原生帮助
+gay --help                      # 显示 gay 别名头部 + agy 原生帮助
 ```
 
 <details>
@@ -108,7 +109,7 @@ npm uninstall -g gay-cli
 ```sh
 npm install    # 安装 TypeScript 开发依赖（零运行时依赖）
 make build     # 编译 src/gay.mts -> bin/gay.mjs
-make test      # 运行 Unix 端到端测试套件
+make test      # 运行 Unix 端到端测试套件（30 项断言）
 make check     # 静态语法与类型检查（sh -n / node --check / tsc --noEmit）
 make install   # 本地安装至 ~/.local/bin/gay
 ```

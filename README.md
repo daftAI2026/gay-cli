@@ -20,7 +20,8 @@
 - **Zero resident overhead on Unix**: Pure POSIX `#!/bin/sh` with `exec agy "$@"`, replacing the wrapper process in-place (~1ms startup, **0 bytes** resident RAM, 100% native TTY/TUI/signals).
 - **All platforms out of the box**: Native implementations for macOS, Linux, and Windows (PowerShell & CMD), plus zero-dependency GitHub `npm` install.
 - **Zero runtime dependencies**: Auditable scripts with no unsigned binaries and no SmartScreen/Gatekeeper warnings.
-- **Transparent passthrough**: Only `--yolo` is rewritten (stopped after `--`); every other flag, subcommand, space, quote, and exit code passes straight through to `agy`.
+- **Transparent passthrough**: Only `--yolo` is rewritten (stopped after `--`); top-level `-h`/`--help` prepends a 3-line alias header before `agy --help`, and every other flag, subcommand, space, quote, and exit code passes straight through to `agy`.
+- **Clean interactive handoff**: Automatically clears the `gay` / `gay --yolo` trigger line on interactive TTY consoles before launching `agy` (leaves pipes, `--help`, `-p`/`--print`, and subcommands untouched; set `GAY_NO_CLEAR=1` to opt out).
 
 ## Quick Start
 
@@ -62,7 +63,7 @@ gay --yolo                      # agy --dangerously-skip-permissions
 gay --yolo -c                   # Continue last session in yolo mode
 gay --yolo -p "refactor this"   # All flags & quoted prompts pass through intact
 gay -- --yolo                   # Stop rewriting after --
-gay --help                      # Full native agy help
+gay --help                      # Show gay aliases + native agy help
 ```
 
 <details>
@@ -108,7 +109,7 @@ npm uninstall -g gay-cli
 ```sh
 npm install    # Install TypeScript devDependencies (zero runtime deps)
 make build     # Compile src/gay.mts -> bin/gay.mjs
-make test      # Run Unix end-to-end test suite (21 assertions)
+make test      # Run Unix end-to-end test suite (30 assertions)
 make check     # Static checks (sh -n, node --check, tsc --noEmit)
 make install   # Local install to ~/.local/bin/gay
 ```

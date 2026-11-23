@@ -1,6 +1,6 @@
 # gay-cli Agent Guide
 
-Shared engineering contract for AI coding agents working in this repository (Antigravity, Claude Code, Codex, Cursor, etc.). For the fractal directory & file map, also read `CLAUDE.md`, `bin/CLAUDE.md`, and `tests/CLAUDE.md`.
+Shared engineering contract for AI coding agents working in this repository (Antigravity, Claude Code, Codex, Cursor, etc.). For the fractal directory & file map, also read `CLAUDE.md`, `src/CLAUDE.md`, `bin/CLAUDE.md`, `docs/CLAUDE.md`, and `tests/CLAUDE.md`.
 
 ## Product Scope
 
@@ -8,6 +8,8 @@ Shared engineering contract for AI coding agents working in this repository (Ant
 
 - `gay` -> `agy`
 - `gay --yolo` -> `agy --dangerously-skip-permissions`
+- Top-level `gay -h` / `gay --help` prepends a 3-line `gay-cli` alias header before delegating to `agy` (subcommand `--help` stays untouched).
+- Interactive TTY launches auto-clear the trigger line (`\x1b[1A\x1b[2K\r`) before handing off to `agy` (opt out via `GAY_NO_CLEAR=1`; never fires on non-TTY, `-h`/`--help`, `-p`/`--print`/`--prompt`, or subcommands).
 - Everything else passes through verbatim (stop rewriting after `--`).
 
 ### What `gay-cli` Should Do
@@ -30,4 +32,4 @@ Before committing any change:
 
 1. Unix: `sh ./tests/test.sh` (covers `sh -n`, `node --check`, `bin/gay`, `bin/gay.mjs`, and `install.sh`).
 2. Windows (CI): `.\tests\test.ps1` (covers `bin/gay.cmd`, `bin/_gay.ps1`, `bin/gay.mjs`, and `install.ps1`).
-3. Keep `CLAUDE.md` (L1), `bin/CLAUDE.md` / `tests/CLAUDE.md` (L2), and L3 file headers synchronized with code changes.
+3. Keep `CLAUDE.md` (L1), `src/CLAUDE.md` / `bin/CLAUDE.md` / `docs/CLAUDE.md` / `tests/CLAUDE.md` (L2), and L3 file headers synchronized with code changes.
